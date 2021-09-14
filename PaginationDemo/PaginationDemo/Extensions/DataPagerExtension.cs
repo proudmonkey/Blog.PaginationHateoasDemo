@@ -24,12 +24,11 @@ namespace PaginationDemo.Extensions
             paged.CurrentPage = page;
             paged.PageSize = limit;
 
-            var totalItemsCountTask = query.CountAsync(cancellationToken);
+            paged.TotalItems = await query.CountAsync(cancellationToken);
 
             var startRow = (page - 1) * limit;
             paged.Items = await query.Skip(startRow).Take(limit).ToListAsync(cancellationToken);
 
-            paged.TotalItems = await totalItemsCountTask;
             paged.TotalPages = (int)Math.Ceiling(paged.TotalItems / (double)limit);
 
             return paged;
